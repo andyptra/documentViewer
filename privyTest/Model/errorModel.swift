@@ -1,3 +1,4 @@
+
 //
 //  errorModel.swift
 //  privyTest
@@ -7,3 +8,11 @@
 //
 
 import Foundation
+
+// MARK: - Status
+struct ErrorRequestModel : Codable {
+    let errorCode: String?
+    enum CodingKeys: String, CodingKey {
+        case errorCode = "status"
+    }
+}

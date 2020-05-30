@@ -14,22 +14,22 @@ class CustomImageView: UIImageView {
         super.init(image: imageIcon)
         self.lastLocation = location
         
-        // MARK :: Draggable
+        // MARK : Draggable
         let draggable =  UIPanGestureRecognizer(target:self, action: #selector(handlePan))
         draggable.delegate = self
         self.addGestureRecognizer(draggable)
         
-        // MARK :: Resize
+        // MARK : Resize
         let resize = UIPinchGestureRecognizer(target: self, action: #selector(handlePin(pinch:)))
         resize.delegate = self
         self.addGestureRecognizer(resize)
-
-        // MARK :: Rotate
+        
+        // MARK : Rotate
         let rotate = UIRotationGestureRecognizer.init(target: self, action: #selector(handleRotate(recognizer:)))
         rotate.delegate = self
         self.addGestureRecognizer(rotate)
         
-        
+        //MARK : setting
         self.center = location
         self.frame = CGRect(x: location.x, y: location.y, width: 150.0, height: 150.0)
         self.isUserInteractionEnabled = true
@@ -45,8 +45,9 @@ class CustomImageView: UIImageView {
     }
     
 }
+//MARK : extension delegate UI Gesture
 extension CustomImageView : UIGestureRecognizerDelegate {
-    
+    //MARK : action for handle pan (draggable)
     @objc func handlePan(_ gestureRecognizer: UIPanGestureRecognizer) {
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             let translation = gestureRecognizer.translation(in: self.superview!)
@@ -55,6 +56,7 @@ extension CustomImageView : UIGestureRecognizerDelegate {
         }
     }
     
+    //MARK : action for handle pin (zoom in out)
     @objc func handlePin(pinch: UIPinchGestureRecognizer) {
         
         if let view = pinch.view {
@@ -63,6 +65,7 @@ extension CustomImageView : UIGestureRecognizerDelegate {
         }
     }
     
+    //MARK : action for handle rotate image
     @objc func handleRotate(recognizer : UIRotationGestureRecognizer) {
         if let view = recognizer.view {
             view.transform = view.transform.rotated(by: recognizer.rotation)

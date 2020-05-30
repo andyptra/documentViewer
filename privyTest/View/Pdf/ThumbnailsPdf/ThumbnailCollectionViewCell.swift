@@ -22,4 +22,7 @@ class ThumbnailCollectionViewCell: UICollectionViewCell {
         // Initialization code
     }
     
+    class func nib() -> UINib {
+        return UINib(nibName: "ThumbnailCollectionViewCell", bundle: nil)
+    }
 }

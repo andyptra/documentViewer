@@ -12,10 +12,8 @@ import PDFKit
 protocol ThumbnailsViewControllerDelegate: class{
     func thumbnailsViewController(_ thumbnailGridViewController: ThumbnailsViewController, didSelectPage page: PDFPage)
 }
-
-
 class ThumbnailsViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
-    
+
     open var pdfDocument: PDFDocument?
     weak var delegate: ThumbnailsViewControllerDelegate?
     
@@ -24,6 +22,7 @@ class ThumbnailsViewController: UICollectionViewController, UICollectionViewDele
         self.setupCollectionView()
         self.view.translatesAutoresizingMaskIntoConstraints = false
     }
+    
     // Mark : function to setup CollectionView
     func setupCollectionView(){
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
@@ -31,12 +30,13 @@ class ThumbnailsViewController: UICollectionViewController, UICollectionViewDele
                                                            action: #selector(closeBtnClick))
         
         // Register cell classes
-        collectionView?.register(UINib(nibName: "ThumbnailCollectionViewCell", bundle: nil),
-                                 forCellWithReuseIdentifier: "ThumbnailCollectionViewCell")
+        self.collectionView.register(ThumbnailCollectionViewCell.nib(), forCellWithReuseIdentifier: "cell")
         
         
-        collectionView?.backgroundColor = UIColor.gray
+        self.collectionView.backgroundColor = UIColor.gray
     }
+    
+    //MARK : action close button
     @objc func closeBtnClick(sender: UIBarButtonItem) {
         dismiss(animated: false, completion: nil)
     }
@@ -48,14 +48,12 @@ extension ThumbnailsViewController{
         return 1
     }
     
-    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return pdfDocument?.pageCount ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ThumbnailCollectionViewCell", for: indexPath) as! ThumbnailCollectionViewCell
-        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ThumbnailCollectionViewCell
         if let page = pdfDocument?.page(at: indexPath.item) {
             let thumbnail = page.thumbnail(of: cell.bounds.size, for: PDFDisplayBox.cropBox)
             cell.imageThumb = thumbnail

@@ -45,7 +45,7 @@
                 <outlet property="pages" destination="tPZ-1f-l9a" id="iZK-Gn-nra"/>
                 <outlet property="thumbView" destination="20A-oe-Sf2" id="97t-2r-zIV"/>
             </connections>
-            <point key="canvasLocation" x="144.20289855072465" y="136.60714285714286"/>
+            <point key="canvasLocation" x="143.47826086956522" y="136.60714285714286"/>
         </collectionViewCell>
     </objects>
 </document>

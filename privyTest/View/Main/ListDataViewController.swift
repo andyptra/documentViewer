@@ -7,24 +7,57 @@
 //
 
 import UIKit
-
-class ListDataViewController: UIViewController,PdfViewModelDelegate {
+import PDFKit
+class ListDataViewController: UIViewController, PdfViewModelDelegate {
     @IBOutlet weak var titleLbl: UILabel!
     @IBOutlet weak var tableViewData: UITableView!
-    
+    var activityView: UIActivityIndicatorView?
     var viewModel = PdfViewModel()
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.delegate = self
-        viewModel.getListData()
+        self.title = "List Data";
+        self.fetchData()
         self.setupTableView()
     }
+    
+    // MARK : func delegate reload data
     func reloadTable() {
-            self.tableViewData.reloadData()
+        self.tableViewData.reloadData()
+    }
+    
+    // MARK: - Networking
+    private func fetchData() {
+        viewModel.getListData()
+        viewModel.delegate = self
+        viewModel.updateLoadingStatus = {
+            let _ = self.viewModel.isLoading ? self.activityIndicatorStart() : self.activityIndicatorStop()
+        }
+        
+        viewModel.showAlert = {
+            if let error = self.viewModel.error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    // MARK: - UI Setup Indicator
+    private func activityIndicatorStart() {
+        activityView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.large)
+        activityView?.color = UIColor.black
+        activityView?.center = self.view.center
+        self.view.addSubview(activityView!)
+        activityView?.startAnimating()
+    }
+    
+    // MARK: - UI Stop Indicator
+    private func activityIndicatorStop() {
+        if (activityView != nil){
+            activityView?.stopAnimating()
+        }
     }
 }
 
-
+// MARK : tableview delegate and data source
 extension ListDataViewController :  UITableViewDelegate, UITableViewDataSource {
     func setupTableView(){
         tableViewData.register(ListDataTableViewCell.nib(), forCellReuseIdentifier: "cell")
@@ -42,11 +75,11 @@ extension ListDataViewController :  UITableViewDelegate, UITableViewDataSource {
         -> Int {
             return viewModel.dataItems.count
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //        //        selectedOffersIndex = indexPath.row
-        //        let vc = PhotosViewController()
-        //        self.navigationController?.pushViewController(vc, animated: false)
+        let vc = PdfViewController()
+        vc.urlString = viewModel.dataItems[indexPath.row].file!
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
