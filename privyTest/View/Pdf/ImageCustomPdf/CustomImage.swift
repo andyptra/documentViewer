@@ -10,7 +10,7 @@ import UIKit
 
 class CustomImageView: UIImageView {
     var lastLocation:CGPoint?
-    init(imageIcon: UIImage?, location:CGPoint) {
+    init(imageIcon: UIImage?, location:CGPoint, size:CGRect) {
         super.init(image: imageIcon)
         self.lastLocation = location
         
@@ -31,7 +31,7 @@ class CustomImageView: UIImageView {
         
         //MARK : setting
         self.center = location
-        self.frame = CGRect(x: location.x, y: location.y, width: 150.0, height: 150.0)
+        self.frame = size
         self.isUserInteractionEnabled = true
         self.isMultipleTouchEnabled = true
     }

@@ -16,9 +16,10 @@ class ThumbnailsViewController: UICollectionViewController, UICollectionViewDele
 
     open var pdfDocument: PDFDocument?
     weak var delegate: ThumbnailsViewControllerDelegate?
-    
+    var TitleHeader : String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = TitleHeader
         self.setupCollectionView()
         self.view.translatesAutoresizingMaskIntoConstraints = false
     }

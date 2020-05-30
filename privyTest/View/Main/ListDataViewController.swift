@@ -43,9 +43,10 @@ class ListDataViewController: UIViewController, PdfViewModelDelegate {
     // MARK: - UI Setup Indicator
     private func activityIndicatorStart() {
         activityView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.large)
-        activityView?.color = UIColor.black
+        activityView?.color = UIColor.red
+        activityView?.frame = CGRect(x: 0.0, y: 0.0, width: 40.0, height: 40.0);
         activityView?.center = self.view.center
-        self.view.addSubview(activityView!)
+        self.view.bringSubviewToFront(activityView!)
         activityView?.startAnimating()
     }
     
@@ -78,7 +79,10 @@ extension ListDataViewController :  UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = PdfViewController()
+        
         vc.urlString = viewModel.dataItems[indexPath.row].file!
+        vc.TitleHeader = viewModel.dataItems[indexPath.row].name!
+        
         self.navigationController?.pushViewController(vc, animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

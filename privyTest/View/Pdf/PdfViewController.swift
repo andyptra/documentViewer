@@ -12,30 +12,25 @@ import PDFKit
 class PdfViewController: UIViewController {
     var pdfDOC: PDFDocument!
     var pdfxview: PDFView!
+    var TitleHeader : String = ""
     let toolKitView = ToolKitView.instanceFromNib()
     weak var observe : NSObjectProtocol?
-    var imageOne :CustomImageView = CustomImageView(imageIcon: UIImage(named: "google_logo"), location: CGPoint(x: 10, y: 330))
+    var imageOne :CustomImageView = CustomImageView(imageIcon: UIImage(named: "logo-privy-colored"), location: CGPoint(x: 10, y: 330), size: CGRect(x: CGPoint(x: 30, y: 200).x, y: CGPoint(x: 30, y: 200).y, width: 250.0, height: 150.0))
     
-    var imageTwo :CustomImageView = CustomImageView(imageIcon: UIImage(named: "photo"), location: CGPoint(x: 30, y: 200))
+    var imageTwo :CustomImageView = CustomImageView(imageIcon: UIImage(named: "swift"), location: CGPoint(x: 30, y: 200), size: CGRect(x: CGPoint(x: 30, y: 200).x, y: CGPoint(x: 30, y: 200).y, width: 150.0, height: 150.0))
     var isShowImage : Bool = false
     var urlString : String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.title = TitleHeader
         
         // MARK : image Draggable
         imageOne.isHidden = true
         imageTwo.isHidden = true
         
         
-        // MARK : ToolKitView
-        toolKitView.frame = CGRect(x: 10, y: view.frame.height - 60, width: self.view.frame.width - 20, height: 40)
-        self.view.addSubview(toolKitView)
-        toolKitView.bringSubviewToFront(self.view)
-        toolKitView.thumbBtn.addTarget(self, action: #selector(thumbBtnClick), for: .touchUpInside)
-        toolKitView.imageBtn.addTarget(self, action: #selector(imageBtnClick), for: .touchUpInside)
-        toolKitView.editBtn.addTarget(self, action: #selector(searchBtnClick), for: .touchUpInside)
-        let tapgesture = UITapGestureRecognizer(target: self, action: #selector(tapGesture(_:)))
-        view.addGestureRecognizer(tapgesture)
+        
         
         // MARK : PDF
         pdfxview = PDFView(frame: self.view.bounds)
@@ -52,6 +47,16 @@ class PdfViewController: UIViewController {
         }catch let err{
             print(err.localizedDescription)
         }
+        
+        // MARK : ToolKitView
+        toolKitView.frame = CGRect(x: 10, y: view.frame.height - 60, width: self.view.frame.width - 20, height: 40)
+        self.view.addSubview(toolKitView)
+        toolKitView.bringSubviewToFront(self.view)
+        toolKitView.thumbBtn.addTarget(self, action: #selector(thumbBtnClick), for: .touchUpInside)
+        toolKitView.imageBtn.addTarget(self, action: #selector(imageBtnClick), for: .touchUpInside)
+        toolKitView.editBtn.addTarget(self, action: #selector(searchBtnClick), for: .touchUpInside)
+        let tapgesture = UITapGestureRecognizer(target: self, action: #selector(tapGesture(_:)))
+        view.addGestureRecognizer(tapgesture)
     }
     
     // MARK : action tapGesture
@@ -89,13 +94,14 @@ class PdfViewController: UIViewController {
         let thumbnailViewController = ThumbnailsViewController(collectionViewLayout: layout)
         thumbnailViewController.pdfDocument = pdfDOC
         thumbnailViewController.delegate = self
-        
+        thumbnailViewController.TitleHeader = TitleHeader
         let nav = UINavigationController(rootViewController: thumbnailViewController)
         self.present(nav, animated: true, completion:nil)
     }
     
     // MARK : action Search PDF
     @objc func searchBtnClick(sender: UIButton) {
+        setupImage(status: true)
         let searchViewController = SearchTableViewController()
         searchViewController.pdfDocument = pdfDOC
         searchViewController.delegate = self
